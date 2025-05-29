@@ -9,6 +9,336 @@
         content="Explore our Finance courses covering financial securities, instruments, portfolio management, and more. Enroll now and build your financial literacy skills.">
     <link rel="stylesheet" href="./assets/css/style.css">
     <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
+        <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #ff8086;
+            background:  #fffafa;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section {
+            padding: 4rem 0;
+        }
+
+        .title-sm {
+            font-size: 1rem;
+            color: #0c0c0c;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .headline-md {
+            font-size: 3rem;
+            color: #080808;
+            margin-bottom: 2rem;
+            font-weight: 700;
+        }
+
+        .span {
+            color:  #ff8086;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .description {
+            font-size: 1.1rem;
+            color:  #ff8086;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            line-height: 1.8;
+        }
+
+        .grid-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            list-style: none;
+            margin-bottom: 3rem;
+        }
+
+        .course-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .course-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+        }
+
+        .card-icon {
+            width: 100%;
+            height: 200px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .course-card:hover .card-icon img {
+            transform: scale(1.1);
+        }
+
+        .title-lg {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .duration {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .course-description {
+            color: #555;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .pricing-section {
+            border-top: 2px solid #eee;
+            padding-top: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .pricing-options {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .price-option {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .price-option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .price-option.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .price-amount {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .price-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .enroll-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .enroll-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .enroll-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Payment Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .payment-form {
+            margin-top: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .payment-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(40, 167, 69, 0.3);
+        }
+
+        .course-summary {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .success-message {
+            display: none;
+            text-align: center;
+            color: #28a745;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 1rem 0;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #ffd700, #ffed4a);
+            color: #333;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .grid-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .headline-md {
+                font-size: 2rem;
+            }
+            
+            .pricing-options {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -36,9 +366,21 @@
                             <h3 class="course-title">Introduction to Finances</h3>
                             <p class="course-duration">Duration: 4 weeks</p>
                         </div>
-                        <a href="course-intro-Finances.html" class="layer-link"
-                            aria-label="Learn more about the Introduction to Finances course">Learn More</a>
-                    </article>
+                        <div class="pricing-section">
+                            <div class="pricing-options">
+                                <div class="price-option" data-price="999" data-type="basic">
+                                    <div class="price-amount">₹999</div>
+                                    <div class="price-label">Basic Access</div>
+                                </div>
+                                <div class="price-option selected" data-price="1999" data-type="premium">
+                                    <div class="price-amount">₹1999</div>
+                                    <div class="price-label">Premium Access</div>
+                                </div>
+                            </div>
+                            <button class="enroll-btn" onclick="openPaymentModal('Introduction to Data Science', this)">
+                                Enroll Now
+                            </button>
+                        </div>
                 </li>
 
                 <li>
@@ -51,9 +393,21 @@
                             <h3 class="course-title">Financial Securities</h3>
                             <p class="course-duration">Duration: 6 weeks</p>
                         </div>
-                        <a href="course-Financial-securities.html" class="layer-link"
-                            aria-label="Learn more about Financial Securities course">Learn More</a>
-                    </article>
+                        <div class="pricing-section">
+                            <div class="pricing-options">
+                                <div class="price-option" data-price="999" data-type="basic">
+                                    <div class="price-amount">₹999</div>
+                                    <div class="price-label">Basic Access</div>
+                                </div>
+                                <div class="price-option selected" data-price="1999" data-type="premium">
+                                    <div class="price-amount">₹1999</div>
+                                    <div class="price-label">Premium Access</div>
+                                </div>
+                            </div>
+                            <button class="enroll-btn" onclick="openPaymentModal('Introduction to Data Science', this)">
+                                Enroll Now
+                            </button>
+                        </div>
                 </li>
 
                 <li>
@@ -66,9 +420,21 @@
                             <h3 class="course-title">Financial Instruments</h3>
                             <p class="course-duration">Duration: 5 weeks</p>
                         </div>
-                        <a href="course-Financial-instruments.html" class="layer-link"
-                            aria-label="Learn more about Financial Instruments course">Learn More</a>
-                    </article>
+                        <div class="pricing-section">
+                            <div class="pricing-options">
+                                <div class="price-option" data-price="999" data-type="basic">
+                                    <div class="price-amount">₹999</div>
+                                    <div class="price-label">Basic Access</div>
+                                </div>
+                                <div class="price-option selected" data-price="1999" data-type="premium">
+                                    <div class="price-amount">₹1999</div>
+                                    <div class="price-label">Premium Access</div>
+                                </div>
+                            </div>
+                            <button class="enroll-btn" onclick="openPaymentModal('Introduction to Data Science', this)">
+                                Enroll Now
+                            </button>
+                        </div>
                 </li>
 
                 <li>
@@ -81,9 +447,21 @@
                             <h3 class="course-title">Portfolio Management</h3>
                             <p class="course-duration">Duration: 8 weeks</p>
                         </div>
-                        <a href="course-Portfolio-management.html" class="layer-link"
-                            aria-label="Learn more about Portfolio Management course">Learn More</a>
-                    </article>
+                        <div class="pricing-section">
+                            <div class="pricing-options">
+                                <div class="price-option" data-price="999" data-type="basic">
+                                    <div class="price-amount">₹999</div>
+                                    <div class="price-label">Basic Access</div>
+                                </div>
+                                <div class="price-option selected" data-price="1999" data-type="premium">
+                                    <div class="price-amount">₹1999</div>
+                                    <div class="price-label">Premium Access</div>
+                                </div>
+                            </div>
+                            <button class="enroll-btn" onclick="openPaymentModal('Introduction to Data Science', this)">
+                                Enroll Now
+                            </button>
+                        </div>
                 </li>
 
                 <li>
@@ -96,15 +474,184 @@
                             <h3 class="course-title">Statistics</h3>
                             <p class="course-duration">Duration: 10 weeks</p>
                         </div>
-                        <a href="course-Statistics.html" class="layer-link"
-                            aria-label="Learn more about Statistics course">Learn More</a>
-                    </article>
+                        <div class="pricing-section">
+                            <div class="pricing-options">
+                                <div class="price-option" data-price="999" data-type="basic">
+                                    <div class="price-amount">₹999</div>
+                                    <div class="price-label">Basic Access</div>
+                                </div>
+                                <div class="price-option selected" data-price="1999" data-type="premium">
+                                    <div class="price-amount">₹1999</div>
+                                    <div class="price-label">Premium Access</div>
+                                </div>
+                            </div>
+                            <button class="enroll-btn" onclick="openPaymentModal('Introduction to Data Science', this)">
+                                Enroll Now
+                            </button>
+                        </div>
                 </li>
             </ul>
 
-            <a href="enroll.html" class="btn btn-primary">Enroll in a Course</a>
+            <a href="#" class="btn btn-primary">Other Coming soon</a>
         </div>
     </section>
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePaymentModal()">&times;</span>
+            <h2 id="modalTitle">Complete Your Enrollment</h2>
+            
+            <div class="course-summary">
+                <h3 id="selectedCourse"></h3>
+                <p><strong>Price:</strong> <span id="selectedPrice"></span></p>
+                <p><strong>Access Type:</strong> <span id="selectedType"></span></p>
+            </div>
+
+            <form class="payment-form" onsubmit="processPayment(event)">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" name="fullName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="cardNumber">Card Number</label>
+                    <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" required>
+                </div>
+                
+                <div style="display: flex; gap: 1rem;">
+                    <div class="form-group" style="flex: 1;">
+                        <label for="expiryDate">Expiry Date</label>
+                        <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY" required>
+                    </div>
+                    
+                    <div class="form-group" style="flex: 1;">
+                        <label for="cvv">CVV</label>
+                        <input type="text" id="cvv" name="cvv" placeholder="123" required>
+                    </div>
+                </div>
+
+                <div class="success-message" id="successMessage">
+                    🎉 Payment Successful! Welcome to the course!
+                </div>
+                
+                <button type="submit" class="payment-btn" id="paymentBtn">
+                    Complete Payment
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Animation on Scroll -->
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        let currentSelectedPrice = 1999;
+        let currentSelectedType = 'premium';
+        let currentCourse = '';
+
+        // Price option selection
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.price-option')) {
+                const option = e.target.closest('.price-option');
+                const card = option.closest('.course-card');
+                
+                // Remove selected class from siblings
+                card.querySelectorAll('.price-option').forEach(opt => opt.classList.remove('selected'));
+                
+                // Add selected class to clicked option
+                option.classList.add('selected');
+            }
+        });
+
+        function openPaymentModal(courseName, button) {
+            const card = button.closest('.course-card');
+            const selectedOption = card.querySelector('.price-option.selected');
+            
+            currentCourse = courseName;
+            currentSelectedPrice = selectedOption.dataset.price;
+            currentSelectedType = selectedOption.dataset.type;
+            
+            document.getElementById('selectedCourse').textContent = courseName;
+            document.getElementById('selectedPrice').textContent = '₹' + currentSelectedPrice;
+            document.getElementById('selectedType').textContent = currentSelectedType === 'basic' ? 'Basic Access' : 'Premium Access';
+            
+            document.getElementById('paymentModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePaymentModal() {
+            document.getElementById('paymentModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            
+            // Reset form
+            document.querySelector('.payment-form').reset();
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('paymentBtn').style.display = 'block';
+        }
+
+        function processPayment(event) {
+            event.preventDefault();
+            
+            const paymentBtn = document.getElementById('paymentBtn');
+            const successMessage = document.getElementById('successMessage');
+            
+            // Simulate payment processing
+            paymentBtn.textContent = 'Processing...';
+            paymentBtn.disabled = true;
+            
+            setTimeout(() => {
+                paymentBtn.style.display = 'none';
+                successMessage.style.display = 'block';
+                
+                // Auto close modal after 3 seconds
+                setTimeout(() => {
+                    closePaymentModal();
+                    paymentBtn.textContent = 'Complete Payment';
+                    paymentBtn.disabled = false;
+                }, 3000);
+            }, 2000);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('paymentModal');
+            if (event.target == modal) {
+                closePaymentModal();
+            }
+        }
+
+        // Format card number input
+        document.getElementById('cardNumber').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\s/g, '').replace(/[^0-9]/gi, '');
+            let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+            e.target.value = formattedValue;
+        });
+
+        // Format expiry date input
+        document.getElementById('expiryDate').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            }
+            e.target.value = value;
+        });
+
+        // CVV input validation
+        document.getElementById('cvv').addEventListener('input', function(e) {
+            e.target.value = e.target.value.replace(/[^0-9]/gi, '').substring(0, 3);
+        });
+    </script>
 </body>
 
 </html>

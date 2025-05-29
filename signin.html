@@ -1,112 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillWise - Sign In</title>
-    <link rel="stylesheet" href="assets/css/signin.css">
-  <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BioPulse - Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <link rel="stylesheet" href="assets/css/signin.css" />
 </head>
-<body style="overflow: hidden;">
-  <header>
-    <nav class="navbar">
-      <a href="./index.html" class="logo">SkillWise</a>
-      <ul style="margin-right: 2rem;">
-        <li>
-          <a href="./index.html" class="nav-link" style="margin-right: 0.5rem;">Home</a>
-          <i class="fa-solid fa-house"></i>
-        </li>
-      </ul>
-    </nav>
-  </header>
-
-    <div class="container">
-        <div class="form-container">
-            <!-- Add SkillWise Icon/Logo -->
-            <img src="assets/images/Skillwise_logo.jpg" alt="SkillWise Logo" class="logo">
-
-            <h1>Welcome to <span class="brand">SkillWise</span></h1>
-            <p><strong>Sign in</strong> to access your learning dashboard</p>
-
-            <form action="#" method="POST">
-                <div class="input-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
-                </div>
-                <div class="input-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
-                </div>
-                <div class="input-group">
-                    <label for="password">Password</label>
-                    <div class="password">
-                        <input type="password" id="password" name="password" placeholder="Enter your password">
-                        <i class="fa-solid fa-eye-slash" id="togglePassword"></i>
-                    </div>
-                </div>
-                <!-- <div class="strength-bar">
-                    <div id="strengthBar" class="strength-bar-inner"></div>
-                </div>
-                <p class="suggestion">
-                  <small>Use special characters and numbers for a strong password</small>
-
-                </p> -->
-
-                <button type="submit" class="signin-btn" id="submit">Sign In</button>
-
-                <p class="signup-link">Don't have an account? <a href="./signup.html">Sign up here</a></p>
-            </form>
-        </div>
+<body>
+  <div class="container">
+    <div class="left-panel">
+      <h1>Welcome to <br>SkillWise</h1>
+      <img src="https://th.bing.com/th/id/OIP.dA7eOTcHet2eW1kUvF-r1gHaE8?w=281&h=188&c=7&r=0&o=5&dpr=1.3&pid=1.7" alt="Security">
     </div>
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <div class="right-panel">
+      <h2 id="formTitle">Login</h2>
+      <p>Welcome! Login to explore our edu hub</p>
+      <form id="authForm">
+        <input type="email" id="username" placeholder="Email" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <div>
+          <input type="checkbox" id="rememberMe" /> <label for="rememberMe"> Remember me</label>
+        </div>
+        <button type="submit" class="btn" id="authBtn">LOGIN</button>
+        <div class="social-login">
+          <button type="button" class="social-btn" onclick="googleLogin()"><i class="fab fa-google"></i></button>
+          <button type="button" class="social-btn" onclick="facebookLogin()"><i class="fab fa-facebook-f"></i></button>
+          <button type="button" class="social-btn" onclick="twitterLogin()"><i class="fab fa-twitter"></i></button>
+        </div>
+        <div class="footer-links">
+          <a onclick="toggleForm(true)">New User? <b>Signup</b></a>
+          <a onclick="toggleForm(false)">Already have an account? <b>Login</b></a>
+          <a onclick="resetPassword()">Forgot your password?</a>
+        </div>
+      </form>
+    </div>
+  </div>
 
     <script>
-      const togglePassword = document.querySelector("#togglePassword");
-      const passwordInput = document.querySelector("#password");
-      const submitBtn = document.querySelector("#submit");
-      const emailInput = document.querySelector("#email");
+        const firebaseConfig = {
+        apiKey: "AIzaSyAhUFiUcvSHvB8RCZpwPq2uq1XS16Gw20Y",
+        authDomain: "skillwise-e7106.firebaseapp.com",
+        projectId: "skillwise-e7106",
+        storageBucket: "skillwise-e7106.firebasestorage.app",
+        messagingSenderId: "1039713235607",
+        appId: "1:1039713235607:web:ddf02d6b2e860427956fd2",
+        measurementId: "G-0E9KGEWZ09"
+};
 
-      togglePassword.addEventListener("click", function () {
-        const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
-        passwordInput.setAttribute("type", type);
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
-        this.classList.toggle("fa-eye-slash");
-        this.classList.toggle("fa-eye");
-      });
+const formTitle = document.getElementById("formTitle");
+const authBtn = document.getElementById("authBtn");
+const authForm = document.getElementById("authForm");
+let isSignup = false;
 
+function toggleForm(signup) {
+  isSignup = signup;
+  formTitle.textContent = signup ? "Sign Up" : "Login";
+  authBtn.textContent = signup ? "SIGN UP" : "LOGIN";
+}
 
+// Email/Password Authentication
+authForm.addEventListener("submit", function (e) {
+  e.preventDefault();
+  const email = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
 
-      submitBtn.addEventListener("click", (e) => {
-         e.preventDefault();
+  if (isSignup) {
+    auth.createUserWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        alert("Account created successfully!");
+        window.location.href = "index.html";
+      })
+      .catch(error => alert(error.message));
+  } else {
+    auth.signInWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        alert("Login successful.");
+        window.location.href = "index.html";
+      })
+      .catch(error => alert(error.message));
+  }
+});
 
-        const email = emailInput.value;
-        const emailError = document.getElementById("emailError");
+// Password Reset Function
+function resetPassword() {
+  const email = prompt("Please enter your email for password reset:");
+  if (email) {
+    auth.sendPasswordResetEmail(email)
+      .then(() => alert("Password reset email sent."))
+      .catch(error => alert(error.message));
+  }
+}
 
+// Google Login Function - Using Popup for better UX
+function googleLogin() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  
+  // Optional: Add additional OAuth 2.0 scopes
+  provider.addScope('profile');
+  provider.addScope('email');
+  
+  auth.signInWithPopup(provider)
+    .then((result) => {
+      // Successfully signed in
+      const user = result.user;
+      console.log("Google login successful:", user.displayName);
+      alert(`Welcome ${user.displayName}! Login successful.`);
+      
+      // Redirect to index page
+      window.location.href = "index.html";
+    })
+    .catch((error) => {
+      console.error("Google login error:", error);
+      
+      // Handle specific error cases
+      if (error.code === 'auth/popup-closed-by-user') {
+        alert("Login cancelled by user.");
+      } else if (error.code === 'auth/popup-blocked') {
+        alert("Popup blocked. Please allow popups and try again.");
+      } else {
+        alert("Google login failed: " + error.message);
+      }
+    });
+}
 
-        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+// Facebook Login Function - Using Popup for better UX
+function facebookLogin() {
+  const provider = new firebase.auth.FacebookAuthProvider();
+  
+  // Optional: Add additional Facebook permissions
+  provider.addScope('email');
+  provider.addScope('public_profile');
+  
+  auth.signInWithPopup(provider)
+    .then((result) => {
+      // Successfully signed in
+      const user = result.user;
+      console.log("Facebook login successful:", user.displayName);
+      alert(`Welcome ${user.displayName}! Login successful.`);
+      
+      // Redirect to index page
+      window.location.href = "index.html";
+    })
+    .catch((error) => {
+      console.error("Facebook login error:", error);
+      
+      // Handle specific error cases
+      if (error.code === 'auth/popup-closed-by-user') {
+        alert("Login cancelled by user.");
+      } else if (error.code === 'auth/popup-blocked') {
+        alert("Popup blocked. Please allow popups and try again.");
+      } else {
+        alert("Facebook login failed: " + error.message);
+      }
+    });
+}
 
-        if (!emailPattern.test(email)) {
+// Alternative: Google Login with Redirect (use if popup doesn't work)
+function googleLoginRedirect() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  provider.addScope('profile');
+  provider.addScope('email');
+  
+  auth.signInWithRedirect(provider);
+}
 
-          if (!emailError) {
-            const errorMsg = document.createElement("p");
-            errorMsg.id = "emailError";
-            errorMsg.style.color = "red";
-            errorMsg.textContent = "Email is incorrect. Please enter a valid email address.";
-            emailInput.parentElement.appendChild(errorMsg);
-          }
-        } else {
+// Alternative: Facebook Login with Redirect (use if popup doesn't work)
+function facebookLoginRedirect() {
+  const provider = new firebase.auth.FacebookAuthProvider();
+  provider.addScope('email');
+  provider.addScope('public_profile');
+  
+  auth.signInWithRedirect(provider);
+}
 
-          if (emailError) {
-            emailError.remove();
-          }
+// Handle redirect result after sign-in (for redirect-based auth)
+firebase.auth().getRedirectResult()
+  .then((result) => {
+    if (result.user) {
+      console.log("Redirect login successful:", result.user.displayName);
+      alert(`Welcome ${result.user.displayName}! Login successful.`);
+      window.location.href = "index.html";
+    }
+  })
+  .catch(error => {
+    console.error("Redirect login error:", error);
+    alert("Login error: " + error.message);
+  });
 
-          e.target.closest("form").submit();
-        }
-      });
+// Auth State Observer - Automatically redirect if user is already logged in
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    console.log("User is already logged in:", user.displayName || user.email);
+    // Uncomment the line below if you want automatic redirect for logged-in users
+    // window.location.href = "index.html";
+  } else {
+    console.log("User is not logged in");
+  }
+});
 
+// Logout function (optional - for testing purposes)
+function logout() {
+  auth.signOut().then(() => {
+    alert("Logged out successfully");
+    // Optionally redirect to login page
+    window.location.reload();
+  }).catch((error) => {
+    alert("Logout error: " + error.message);
+  });
+}
     </script>
-
-
 </body>
 </html>
